@@ -1,0 +1,54 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  # Serwis Bazy Danych PostgreSQL
+  db:
+    image: postgres:15-alpine # Używamy oficjalnego obrazu PostgreSQL
+    container_name: platforma_la_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-user} # Używa zmiennej z .env lub domyślnej 'user'
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password} # Używa zmiennej z .env lub domyślnej 'password'
+      POSTGRES_DB: ${POSTGRES_DB:-platforma_la} # Używa zmiennej z .env lub domyślnej 'platforma_la'
+    ports:
+      - "5432:5432" # Mapuje port hosta na port kontenera
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Utrwalanie danych bazy danych
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-user} -d ${POSTGRES_DB:-platforma_la}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Serwis Aplikacji Backendowej
+  app:
+    container_name: platforma_la_app
+    build:
+      context: . # Buduje obraz z Dockerfile w bieżącym katalogu
+      dockerfile: Dockerfile
+      target: development # Użyjemy celu 'development' dla łatwiejszego dewelopmentu
+    environment:
+      DATABASE_URL: ${DATABASE_URL} # Przekazuje zmienną z .env
+      PORT: ${PORT:-3000}
+      NODE_ENV: development # Ustawia środowisko na deweloperskie
+      # Można dodać inne zmienne np. JWT_SECRET
+    ports:
+      - "${PORT:-3000}:3000" # Mapuje port hosta na port kontenera
+    volumes:
+      - .:/app # Mapuje bieżący katalog hosta do /app w kontenerze (dla hot-reloading)
+      - /app/node_modules # Wyklucza mapowanie node_modules (używamy tych z kontenera)
+    depends_on:
+      db:
+        condition: service_healthy # Uruchamia app dopiero, gdy db jest gotowe
+    networks:
+      - app-network
+    command: npm run dev # Uruchamia serwer deweloperski nodemon
+
+volumes:
+  postgres_data: # Nazwany wolumen do przechowywania danych postgres
+
+networks:
+  app-network: # Definicja sieci dla komunikacji między kontenerami
+    driver: bridge 

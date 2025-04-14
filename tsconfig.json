@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@prisma/client": ["./src/generated/prisma"]
+    },
+    "target": "ES2020",                     // Docelowa wersja ECMAScript
+    "module": "CommonJS",                   // System modułów
+    "outDir": "./dist",                     // Katalog wyjściowy dla skompilowanych plików
+    "rootDir": "./src",                     // Główny katalog plików źródłowych
+    "strict": true,                         // Włącz wszystkie ścisłe opcje sprawdzania typów
+    "esModuleInterop": true,                // Umożliwia interoperacyjność między CommonJS i ES Modules
+    "skipLibCheck": true,                   // Pomiń sprawdzanie typów plików deklaracji
+    "forceConsistentCasingInFileNames": true, // Wymuś spójność wielkości liter w nazwach plików
+    "resolveJsonModule": true,               // Pozwól na import modułów z rozszerzeniem .json
+    "isolatedModules": true
+  },
+  "include": ["src/**/*"],                  // Pliki do uwzględnienia w kompilacji
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"] // Pliki do wykluczenia
+} 

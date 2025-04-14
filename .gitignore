@@ -1,0 +1,34 @@
+# Zależności
+node_modules/
+
+# Pliki budowania
+dist/
+
+# Logi
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Pliki konfiguracyjne środowiskowe (z wyjątkiem przykładu)
+.env
+.env.*
+!.env.example
+
+# Pliki systemowe
+.DS_Store
+Thumbs.db
+
+# Pliki IDE
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Raporty testów
+coverage/ 
