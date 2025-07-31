@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  firstName     String
+  lastName      String
+  dateOfBirth   DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  registrations Registration[]
+
+  @@map("users")
+}
+
+model Competition {
+  id                String            @id @default(cuid())
+  name              String
+  description       String?
+  date              DateTime
+  location          String
+  registrationStart DateTime
+  registrationEnd   DateTime
+  maxParticipants   Int?
+  status            CompetitionStatus @default(DRAFT)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  registrations     Registration[]
+
+  @@map("competitions")
+}
+
+model Registration {
+  id            String             @id @default(cuid())
+  userId        String
+  competitionId String
+  status        RegistrationStatus @default(PENDING)
+  discipline    String?
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  user        User        @relation(fields: [userId], references: [id])
+  competition Competition @relation(fields: [competitionId], references: [id])
+  results     Result[]
+
+  @@unique([userId, competitionId])
+  @@map("registrations")
+}
+
+model Result {
+  id             String   @id @default(cuid())
+  registrationId String
+  value          String
+  unit           String?
+  position       Int?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  registration Registration @relation(fields: [registrationId], references: [id])
+
+  @@map("results")
+}
+
+enum CompetitionStatus {
+  DRAFT
+  OPEN
+  CLOSED
+  COMPLETED
+}
+
+enum RegistrationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  PAID
+}
