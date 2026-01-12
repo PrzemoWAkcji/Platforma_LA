@@ -1,12 +1,18 @@
 import { Router } from 'express';
-import { resultController } from '../modules/results/resultController';
+import {
+  addOrUpdateResult,
+  getCompetitionResults,
+  getRegistrationResult,
+  getUserResults,
+  deleteResult
+} from '../modules/results/resultController';
 
 const router = Router();
 
-router.post('/', resultController.addOrUpdateResult);
-router.get('/competition/:competitionId', resultController.getCompetitionResults);
-router.get('/registration/:registrationId', resultController.getRegistrationResult);
-router.get('/user/:userId', resultController.getUserResults);
-router.delete('/:id', resultController.deleteResult);
+router.post('/', addOrUpdateResult);
+router.get('/competition/:competitionId', getCompetitionResults);
+router.get('/registration/:registrationId', getRegistrationResult);
+router.get('/user/:userId', getUserResults);
+router.delete('/:id', deleteResult);
 
 export default router;

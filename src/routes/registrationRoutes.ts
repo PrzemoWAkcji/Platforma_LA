@@ -1,13 +1,20 @@
 import { Router } from 'express';
-import { registrationController } from '../modules/registrations/registrationController';
+import {
+  createRegistration,
+  getCompetitionRegistrations,
+  getUserRegistrations,
+  getRegistrationById,
+  updateRegistrationStatus,
+  cancelRegistration
+} from '../modules/registrations/registrationController';
 
 const router = Router();
 
-router.post('/', registrationController.create);
-router.get('/competition/:competitionId', registrationController.getCompetitionRegistrations);
-router.get('/user/:userId', registrationController.getUserRegistrations);
-router.get('/:id', registrationController.getById);
-router.put('/:id/status', registrationController.updateStatus);
-router.delete('/:id', registrationController.cancel);
+router.post('/', createRegistration);
+router.get('/competition/:competitionId', getCompetitionRegistrations);
+router.get('/user/:userId', getUserRegistrations);
+router.get('/:id', getRegistrationById);
+router.put('/:id/status', updateRegistrationStatus);
+router.delete('/:id', cancelRegistration);
 
 export default router;

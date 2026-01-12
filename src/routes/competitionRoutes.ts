@@ -1,12 +1,18 @@
 import { Router } from 'express';
-import { competitionController } from '../modules/competitions/competitionController';
+import {
+  getAllCompetitions,
+  getCompetitionById,
+  createCompetition,
+  updateCompetition,
+  deleteCompetition
+} from '../modules/competitions/competitionController';
 
 const router = Router();
 
-router.get('/', competitionController.getAll);
-router.get('/:id', competitionController.getById);
-router.post('/', competitionController.create);
-router.put('/:id', competitionController.update);
-router.delete('/:id', competitionController.delete);
+router.get('/', getAllCompetitions);
+router.get('/:id', getCompetitionById);
+router.post('/', createCompetition);
+router.put('/:id', updateCompetition);
+router.delete('/:id', deleteCompetition);
 
 export default router;
